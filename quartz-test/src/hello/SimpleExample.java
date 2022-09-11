@@ -41,11 +41,19 @@ import org.quartz.impl.StdSchedulerFactory;
  */
 public class SimpleExample {
 	public static class Logger {
-		public void  info(String m) { logmsg(m); }
-		private void logmsg(String m) { System.out.println(Timestamp.from(Instant.now()) +": " + m); }
+		public void info(String m) {
+			logmsg(m);
+		}
+
+		private void logmsg(String m) {
+			System.out.println(Timestamp.from(Instant.now()) + ": " + m);
+		}
 	}
+
 	public class LoggerFactory {
-		static Logger getLogger(@SuppressWarnings("rawtypes") Class c) {return new Logger();}
+		static Logger getLogger(@SuppressWarnings("rawtypes") Class c) {
+			return new Logger();
+		}
 	}
 
 	public void run() throws Exception {
@@ -68,15 +76,15 @@ public class SimpleExample {
 		JobDetail job = newJob(HelloJob.class).withIdentity("job1", "group1").build();
 
 		// Trigger the job to run on the next round minute
-//		Trigger trigger = newTrigger().withIdentity("trigger1", "group1").startAt(runTime).build();
-		
-        Trigger trigger = newTrigger() 
-                .withIdentity("trigger1", "group1") 
-                .withSchedule(simpleSchedule()
-                    .withIntervalInSeconds(10)
-                    .repeatForever())
-                .startNow()
-                .build();
+
+		Trigger trigger = newTrigger()
+				.withIdentity("trigger1", "group1")
+				.withSchedule(
+						simpleSchedule()
+						.withIntervalInSeconds(10)
+						.repeatForever())
+				.startNow()
+				.build();
 
 		// Tell quartz to schedule the job using our trigger
 		sched.scheduleJob(job, trigger);
